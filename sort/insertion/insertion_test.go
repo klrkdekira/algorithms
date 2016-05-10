@@ -20,11 +20,10 @@ func TestInsertionSort(t *testing.T) {
 
 func benchmarkInsertionSortN(length int, b *testing.B) {
 	b.StopTimer()
+	a := helper.RandIntN(length)
+	b.StartTimer()
 	for i := 0; i < b.N; i++ {
-		a := helper.RandIntN(length)
-		b.StartTimer()
 		insertion.Sort(a)
-		b.StopTimer()
 	}
 }
 
