@@ -1,10 +1,6 @@
 package merge
 
-import (
-	"fmt"
-
-	"github.com/klrkdekira/algorithms/helper"
-)
+import "github.com/klrkdekira/algorithms/helper"
 
 type (
 	IntSlice []int
@@ -61,7 +57,6 @@ func (s *Merger) SortAnimation(a []int, c chan *helper.Progress) {
 		I: -1,
 		J: -1,
 	}
-	fmt.Println(a)
 	close(c)
 }
 
