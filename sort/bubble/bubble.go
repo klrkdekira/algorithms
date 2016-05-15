@@ -5,6 +5,8 @@ import (
 	"github.com/klrkdekira/algorithms/sort"
 )
 
+type Bubble struct{}
+
 // Found out I NIH the stdlib `sort` XD
 func Sort(a []int) []int {
 	b := sort.IntSlice(a)
@@ -21,7 +23,7 @@ func Sort(a []int) []int {
 	return []int(b)
 }
 
-func SortAnimation(a []int, c chan *helper.Progress) {
+func (s *Bubble) SortAnimation(a []int, c chan *helper.Progress) {
 	b := sort.IntSlice(a)
 	c <- &helper.Progress{
 		A: []int(b),

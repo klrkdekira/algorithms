@@ -2,6 +2,8 @@ package insertion
 
 import "github.com/klrkdekira/algorithms/helper"
 
+type Insertion struct{}
+
 func Sort(a []int) []int {
 	return SortWithLength(a, len(a))
 }
@@ -27,7 +29,7 @@ func SortWithLength(a []int, length int) []int {
 	return a
 }
 
-func SortAnimation(a []int, c chan *helper.Progress) {
+func (s *Insertion) SortAnimation(a []int, c chan *helper.Progress) {
 	c <- &helper.Progress{
 		A: []int(a),
 		I: -1,

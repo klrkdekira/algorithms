@@ -5,11 +5,17 @@ import (
 	"time"
 )
 
-type Progress struct {
-	A []int
-	I int
-	J int
-}
+type (
+	Progress struct {
+		A []int
+		I int
+		J int
+	}
+
+	Sorter interface {
+		SortAnimation([]int, chan *Progress)
+	}
+)
 
 func RandIntN(length int) []int {
 	a := make([]int, length)
