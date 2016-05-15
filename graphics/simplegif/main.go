@@ -9,6 +9,8 @@ import (
 	"os"
 
 	"github.com/klrkdekira/algorithms/helper"
+	"github.com/klrkdekira/algorithms/sort/bubble"
+	"github.com/klrkdekira/algorithms/sort/insertion"
 	"github.com/klrkdekira/algorithms/sort/merge"
 )
 
@@ -26,13 +28,13 @@ var (
 func main() {
 	var a []int
 
-	// a = helper.RandIntN(sampleSize)
-	// bubbleSort := &bubble.Bubble{}
-	// animateSort(a, "bubble", bubbleSort)
+	a = helper.RandIntN(sampleSize)
+	bubbleSort := &bubble.Bubble{}
+	animateSort(a, "bubble", bubbleSort)
 
-	// a = helper.RandIntN(sampleSize)
-	// insertionSort := &insertion.Insertion{}
-	// animateSort(a, "insertion", insertionSort)
+	a = helper.RandIntN(sampleSize)
+	insertionSort := &insertion.Insertion{}
+	animateSort(a, "insertion", insertionSort)
 
 	a = helper.RandIntN(sampleSize)
 	mergeSort := &merge.Merger{}
