@@ -9,6 +9,7 @@ import (
 
 	"github.com/klrkdekira/algorithms/helper"
 	"github.com/klrkdekira/algorithms/sort/bubble"
+	"github.com/klrkdekira/algorithms/sort/insertion"
 )
 
 var (
@@ -17,23 +18,18 @@ var (
 	palettes = []color.Color{
 		color.RGBA{255, 255, 255, 255},
 		color.RGBA{0, 0, 0, 255},
+		color.RGBA{255, 0, 0, 255},
 	}
 )
 
 func main() {
 	a := helper.RandIntN(20)
-
-	file, err := os.Create("test.gif")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-	if err := gif.EncodeAll(file, animateSort(a)); err != nil {
-		log.Fatal(err)
-	}
+	animateBubbleSort(a)
+	a = helper.RandIntN(20)
+	animateInsertionSort(a)
 }
 
-func animateSort(a []int) *gif.GIF {
+func animateBubbleSort(a []int) {
 	images := []*image.Paletted{}
 	delays := []int{}
 
@@ -41,7 +37,7 @@ func animateSort(a []int) *gif.GIF {
 	// cheated, max value == max sample size
 	ySize := float64((rect.Max.Y - (pad * 2))) / float64(len(a))
 
-	c := make(chan []int)
+	c := make(chan *helper.Progress)
 	done := make(chan struct{})
 	go func() {
 		for {
@@ -52,12 +48,16 @@ func animateSort(a []int) *gif.GIF {
 			img := image.NewPaletted(rect, palettes)
 			images = append(images, img)
 			delays = append(delays, 0)
-			for p, v := range cur {
+			for p, v := range cur.A {
 				start := rect.Min.X + pad + (xSize * p)
 				end := rect.Min.X + pad + (xSize * (p + 1))
 				for x := start; x < end; x++ {
 					for y := rect.Max.Y - pad; y > rect.Max.Y-pad-int(ySize*float64(v)); y-- {
-						img.Set(x, y, palettes[1])
+						if p == cur.I || p == cur.J {
+							img.Set(x, y, palettes[2])
+						} else {
+							img.Set(x, y, palettes[1])
+						}
 					}
 				}
 			}
@@ -68,8 +68,69 @@ func animateSort(a []int) *gif.GIF {
 	bubble.SortAnimation(a, c)
 
 	<-done
-	return &gif.GIF{
+
+	file, err := os.Create("bubble.gif")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	if err := gif.EncodeAll(file, &gif.GIF{
 		Image: images,
 		Delay: delays,
+	}); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func animateInsertionSort(a []int) {
+	images := []*image.Paletted{}
+	delays := []int{}
+
+	xSize := (rect.Max.X - pad*2) / len(a)
+	// cheated, max value == max sample size
+	ySize := float64((rect.Max.Y - (pad * 2))) / float64(len(a))
+
+	c := make(chan *helper.Progress)
+	done := make(chan struct{})
+	go func() {
+		for {
+			cur, more := <-c
+			if !more {
+				break
+			}
+			img := image.NewPaletted(rect, palettes)
+			images = append(images, img)
+			delays = append(delays, 0)
+			for p, v := range cur.A {
+				start := rect.Min.X + pad + (xSize * p)
+				end := rect.Min.X + pad + (xSize * (p + 1))
+				for x := start; x < end; x++ {
+					for y := rect.Max.Y - pad; y > rect.Max.Y-pad-int(ySize*float64(v)); y-- {
+						if p == cur.I || p == cur.J {
+							img.Set(x, y, palettes[2])
+						} else {
+							img.Set(x, y, palettes[1])
+						}
+					}
+				}
+			}
+
+		}
+		close(done)
+	}()
+	insertion.SortAnimation(a, c)
+
+	<-done
+
+	file, err := os.Create("insertion.gif")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	if err := gif.EncodeAll(file, &gif.GIF{
+		Image: images,
+		Delay: delays,
+	}); err != nil {
+		log.Fatal(err)
 	}
 }
