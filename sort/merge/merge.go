@@ -95,7 +95,7 @@ func MergeAnimation(a []int, p, q, r int, c chan *helper.Progress) {
 					a[k] = left[i]
 					c <- &helper.Progress{
 						A: a,
-						I: i,
+						I: p + i,
 						J: k,
 					}
 					i++
@@ -104,7 +104,7 @@ func MergeAnimation(a []int, p, q, r int, c chan *helper.Progress) {
 					c <- &helper.Progress{
 						A: a,
 						I: k,
-						J: j,
+						J: q + j,
 					}
 					j++
 				}
@@ -112,7 +112,7 @@ func MergeAnimation(a []int, p, q, r int, c chan *helper.Progress) {
 				a[k] = left[i]
 				c <- &helper.Progress{
 					A: a,
-					I: i,
+					I: p + i,
 					J: k,
 				}
 				i++
@@ -121,7 +121,7 @@ func MergeAnimation(a []int, p, q, r int, c chan *helper.Progress) {
 				c <- &helper.Progress{
 					A: a,
 					I: k,
-					J: j,
+					J: q + j,
 				}
 				j++
 			}
